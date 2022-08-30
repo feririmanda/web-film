@@ -1,25 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import "./App.css";
+import { ReactComponent as SearchIcon } from "./search.svg";
+import MovieCard from "./MovieCard";
 
-function App() {
+const API_URL = "http://www.omdbapi.com/?apikey=1669fd25";
+const App = () => {
+  // use Hook useState
+  const [movies, setMovies] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // get data film via API omDB
+  const searchMovies = async (title) => {
+    const response = await fetch(`${API_URL}&s=${title}`);
+    const data = await response.json(); // ubah data ke dalam json
+
+    setMovies(data.Search); // get property from API data.Search and set movies
+  };
+
+  // default value film search iron man
+  useEffect(() => {
+    searchMovies("Iron Man");
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h1>MovieLand</h1>
+      <div className="search">
+        <input
+          placeholder="Cari film ..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <SearchIcon onClick={() => searchMovies(searchTerm)} />
+      </div>
+
+      {movies?.length > 0 ? (
+        <div className="container">
+          {/* looping data film in card */}
+          {movies.map((movie) => (
+            <MovieCard movie={movie} />
+          ))}
+        </div>
+      ) : (
+        <div className="empty">
+          <h2>Tidak ada film yang di temukan</h2>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
