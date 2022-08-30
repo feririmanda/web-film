@@ -3,7 +3,7 @@ import "./App.css";
 import { ReactComponent as SearchIcon } from "./search.svg";
 import MovieCard from "./MovieCard";
 
-const API_URL = "http://www.omdbapi.com/?apikey=1669fd25";
+const API_URL = "https://www.omdbapi.com/?apikey=1669fd25";
 const App = () => {
   // use Hook useState
   const [movies, setMovies] = useState([]);
